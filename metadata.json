@@ -1,0 +1,6 @@
+{
+  "name": "CampusArena",
+  "description": "College sports facility and court reservation platform with active student ID validation, late-night access payments, and administrative analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

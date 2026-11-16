@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "LivePulse": {
+      "title": "LivePulse",
+      "description": "Non-PII real-time synchronization pulse emitted by the SportX backend whenever Cloud SQL state changes (bookings, court blocks, roster/ban updates, gate check-ins, light alerts, or policy changes).",
+      "type": "object",
+      "properties": {
+        "channelId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Channel identifier matching the document ID (e.g., global)."
+        },
+        "version": {
+          "type": "integer",
+          "description": "Monotonically increasing sequence counter for client delta detection."
+        },
+        "lastEventType": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Type of mutation event that triggered the sync pulse."
+        },
+        "affectedDate": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 20,
+          "description": "Sports-day YYYY-MM-DD affected by the mutation, if applicable."
+        },
+        "sportId": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 64,
+          "description": "Sport identifier affected by the mutation, if applicable."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "ISO-8601 server timestamp of the last Cloud SQL commit."
+        }
+      },
+      "required": [
+        "channelId",
+        "version",
+        "lastEventType",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/live_sync/{channelId}": {
+      "schema": {
+        "$ref": "#/entities/LivePulse"
+      },
+      "description": "Read-only client listener channel updated exclusively by the SportX Express backend via firebase-admin after Cloud SQL transactions."
+    }
+  }
+}
